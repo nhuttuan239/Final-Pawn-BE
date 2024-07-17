@@ -347,7 +347,7 @@ npm run dev
 
 ## ERD
 
-<img width="766" alt="Screenshot 2023-11-28 at 21 46 48 2" src="https://github.com/LinhTruong97/leaveManagementSystem-BackEnd/assets/129475892/f9e6cac0-ba59-435c-8265-5752416f6dc3">
+<img width="766" alt="Screenshot 2023-11-28 at 21 46 48 2" src="https://github.com/nhuttuan239/Final-Pawn-BE/blob/a2ada0a8f9cf6c1052c1d4927fb37e06cab94052/relationship%20diagram.png">
 
 ## Third-party Libraries
 
