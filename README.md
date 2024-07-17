@@ -347,7 +347,7 @@ npm run dev
 
 ## ERD
 
-<img width="766" alt="Screenshot 2023-11-28 at 21 46 48 2" src="https://github.com/nhuttuan239/Final-Pawn-BE/blob/a2ada0a8f9cf6c1052c1d4927fb37e06cab94052/relationship%20diagram.png">
+<img width="766" alt="Screenshot 2023-11-28 at 21 46 48 2" src="https://github.com/nhuttuan239/Final-Pawn-BE/blob/3877d06a6df1d7e53a4e2f1f5e8a2ed1af5931c8/Entity%20relationship%20Diagram.drawio.png">
 
 ## Third-party Libraries
 
