@@ -32,11 +32,11 @@ contractController.createContract = catchAsync(async (req, res, next) => {
     path: "reportTo",
     model: "User",
   });
-  console.log("managerInfo:", managerInfo);
+
   const managerID = managerInfo.reportTo._id;
-  console.log("managerID:", managerID);
+
   const managerName = managerInfo.username;
-  // add error -->if(!managerInfo)
+
   const managerId = managerInfo.reportTo._id;
 
   const newCustomer = await Customer.create({
@@ -59,7 +59,6 @@ contractController.createContract = catchAsync(async (req, res, next) => {
   const CnumberType = interestType.slice(0, 3).toUpperCase();
   //Format Date
   const curtDate = new Date();
-  console.log("curtDate>>>>", curtDate);
 
   const MM = new Intl.NumberFormat("en-US", {
     minimumIntegerDigits: 2,

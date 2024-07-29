@@ -28,20 +28,17 @@ billController.createBill = catchAsync(async (req, res, next) => {
 
   const customer = await Customer.findById(customerId);
   const customerName = customer.fullname;
-  console.log("customer Name", customerName);
+
   //Format Date
   const formatPayDate = new Date(resPayDate);
-  console.log("formatPayDate", formatPayDate);
+
   //   const customerName = contractCheck.customer.fullname;
   const createContractDate = new Date(contractCheck.createDate);
-  console.log("createContractDate", createContractDate);
+
   let totalDays =
     Math.ceil((formatPayDate - createContractDate) / (1000 * 60 * 60 * 24)) + 1;
 
-  console.log("totalDays", totalDays);
-
   const priceContract = contractCheck.price;
-  console.log("priceContract", priceContract);
 
   let interestRateContract;
   // if totalDays <= dateEnd[2]
@@ -59,9 +56,9 @@ billController.createBill = catchAsync(async (req, res, next) => {
     let interest1 =
       (totalDays - (totalDays % contractCheck.interests[2].dateEnd)) /
       contractCheck.interests[2].dateEnd;
-    console.log("interest1", interest1);
+
     let interest2 = totalDays % contractCheck.interests[2].dateEnd;
-    console.log("interest2", interest2);
+
     let interestRateContract2;
     if (interest2 === 0) {
       interestRateContract2 = 0;
@@ -78,8 +75,6 @@ billController.createBill = catchAsync(async (req, res, next) => {
         contractCheck.interests[2].interest * interest1 + interestRateContract2;
     }
   }
-  console.log("interestRateContract", interestRateContract);
-  //   const lastPaidContractDate = new Date(); //Chua hieu logic
 
   const paymentforInterest = interestRateContract * priceContract;
   const totalPaymentContract = priceContract + paymentforInterest;
@@ -95,7 +90,7 @@ billController.createBill = catchAsync(async (req, res, next) => {
   const historyBills = await History.find({ cnumber: cnumberCheck });
   const lastPaidContractDate =
     historyBills[historyBills.length - 1].lastPayDate;
-  console.log("lastPaidContractDate", lastPaidContractDate);
+
   // Create bill
   let bill = await Bill.create({
     authorCheckBill: currentUserId,

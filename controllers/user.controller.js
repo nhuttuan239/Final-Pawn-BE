@@ -119,7 +119,7 @@ userController.updateUser = catchAsync(async (req, res, next) => {
   const targetUserId = req.params.id;
 
   let user = await User.findById(targetUserId);
-  console.log("user>>>", user);
+
   if (!user)
     throw new AppError(401, "User not found", "Get Current User Error");
   // Process

@@ -39,7 +39,6 @@ customerController.createNewCustomer = async (req, res, next) => {
 customerController.updateCustomer = catchAsync(async (req, res, next) => {
   //Get data from request
   const targetCustomerId = req.params.id;
-  console.log(targetCustomerId);
 
   let customer = await Customer.findById(targetCustomerId);
   if (!customer)
@@ -93,7 +92,7 @@ customerController.getCustomers = catchAsync(async (req, res, next) => {
   //Get data from request
 
   let { page, limit, ...filter } = { ...req.query };
-  console.log(filter.name);
+
   // Business Logic Validation
   page = parseInt(page) || 1;
   limit = parseInt(limit) || 10;

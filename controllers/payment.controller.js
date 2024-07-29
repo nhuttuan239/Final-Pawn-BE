@@ -18,10 +18,8 @@ paymentController.putInfoPayment = catchAsync(async (req, res, next) => {
   //Get data from request
   const currentUserId = req.userId;
   const payDate = req.body.payDate;
-  console.log("payDate>>>>>", payDate);
 
   const formatPayDate = new Date(payDate);
-  console.log("formatPayDate>>>>>>>>>>>>", typeof formatPayDate);
 
   const targetContractId = req.params.id;
   const contractCheck = await Contract.findById(targetContractId);
@@ -30,9 +28,8 @@ paymentController.putInfoPayment = catchAsync(async (req, res, next) => {
   const customerName = contractCheck.customerName;
 
   const createDate = contractCheck.createDate;
-  console.log("createDate>>>>>>>>>>>>", typeof createDate);
+
   const formatCreateDate = format(createDate, "dd/MM/yyyy");
-  console.log("formatCreateDate:", formatCreateDate);
 
   // Logic nearestpayDate
   // find bill with payDate nearest
@@ -46,7 +43,6 @@ paymentController.putInfoPayment = catchAsync(async (req, res, next) => {
   let nearPayDate;
   if (nearestBill) {
     nearPayDate = new Date(nearestBill.payDate);
-    console.log("nearPayDate", nearPayDate);
   }
 
   let totalDays;
@@ -56,7 +52,6 @@ paymentController.putInfoPayment = catchAsync(async (req, res, next) => {
     );
   } else {
     totalDays = Math.ceil((formatPayDate - createDate) / (1000 * 60 * 60 * 24));
-    console.log("totalDays>>>>>>>>>>>>>>", totalDays);
   }
 
   const priceContract = contractCheck.price;
@@ -131,27 +126,17 @@ paymentController.createBill = catchAsync(async (req, res, next) => {
   const cnumberCheck = contractCheck.cnumber;
 
   const customerName = contractCheck.customerName;
-  console.log("customer Name", customerName);
 
   const createDate = contractCheck.createDate;
-  // console.log(">>>>>>>>createDate>>>>>>", createDate);
-  // console.log(">>>>Type of createDate>>>>>>", typeof createDate);
 
   const payDate = req.body.payDate;
-  // console.log(">>>>>>>>payDate>>>>>>", payDate);
-  // console.log(">>>>Type of payDate>>>>>>", typeof payDate);
 
   const formatPayDate = new Date(payDate);
-  // console.log(">>>>>>>>formatPayDate>>>>>>", formatPayDate);
-  // console.log(">>>>Type of formatPayDate>>>>>>", typeof formatPayDate);
 
   let totalDays =
     Math.ceil((formatPayDate - createDate) / (1000 * 60 * 60 * 24)) + 1;
 
-  console.log("totalDays", totalDays);
-
   const priceContract = contractCheck.price;
-  console.log("priceContract", priceContract);
 
   let interestRateContract;
   // if totalDays <= dateEnd[2]
@@ -169,9 +154,9 @@ paymentController.createBill = catchAsync(async (req, res, next) => {
     let interest1 =
       (totalDays - (totalDays % contractCheck.interests[2].dateEnd)) /
       contractCheck.interests[2].dateEnd;
-    console.log("interest1", interest1);
+
     let interest2 = totalDays % contractCheck.interests[2].dateEnd;
-    console.log("interest2", interest2);
+
     let interestRateContract2;
     if (interest2 === 0) {
       interestRateContract2 = 0;
@@ -188,7 +173,7 @@ paymentController.createBill = catchAsync(async (req, res, next) => {
         contractCheck.interests[2].interest * interest1 + interestRateContract2;
     }
   }
-  console.log("interestRateContract", interestRateContract);
+
   //   const lastPaidContractDate = new Date(); //Chua hieu logic
 
   const paymentforInterest = interestRateContract * priceContract;
@@ -206,12 +191,6 @@ paymentController.createBill = catchAsync(async (req, res, next) => {
     payment: selectedPayment,
     cnumber: cnumberCheck,
   });
-  // //
-  // const historyPayments = await History.find({ cnumber: cnumberCheck }).sort({
-  //   lastPayDate: -1,
-  // });
-  // const lastPaidContractDate = historyPayments[0].lastPayDate;
-  // console.log("lastPaidContractDate", lastPaidContractDate);
 
   return sendResponse(res, 200, true, bill, null, "Create Bill Successful");
 });
@@ -224,7 +203,7 @@ paymentController.getAllBills = catchAsync(async (req, res, next) => {
   const targetContractId = req.params.id;
   const contractCheck = await Contract.findById(targetContractId);
   const cnumberCheck = contractCheck.cnumber;
-  console.log("targetContractId", cnumberCheck);
+
   page = parseInt(page) || 1;
   limit = parseInt(limit) || 10;
   // Process
@@ -261,7 +240,6 @@ paymentController.getAllBills = catchAsync(async (req, res, next) => {
 paymentController.deleteBill = catchAsync(async (req, res, next) => {
   //Get data from request
   const targetBillId = req.params.id;
-  console.log(targetBillId);
 
   let bill = await Bill.findOneAndUpdate(
     { _id: targetBillId },
@@ -306,7 +284,7 @@ paymentController.getPhoneContract = catchAsync(async (req, res, next) => {
   const cnumberCheck = contractCheck.cnumber;
 
   const customerName = contractCheck.customerName;
-  console.log("customer Name", customerName);
+
   const formatPayDate = new Date();
   const converPayDate = format(formatPayDate, "dd/MM/yyyy");
   const createDate = contractCheck.createDate;
@@ -320,11 +298,10 @@ paymentController.getPhoneContract = catchAsync(async (req, res, next) => {
   })
     .sort({ payDate: -1 })
     .exec();
-  console.log("nearestBill>>>>>>>", nearestBill);
+
   let nearPayDate;
   if (nearestBill) {
     nearPayDate = new Date(nearestBill.payDate);
-    console.log("nearPayDate", nearPayDate);
   }
 
   let totalDays;
@@ -334,7 +311,6 @@ paymentController.getPhoneContract = catchAsync(async (req, res, next) => {
     );
   } else {
     totalDays = Math.ceil((formatPayDate - createDate) / (1000 * 60 * 60 * 24));
-    console.log("totalDays>>>>>>>>>>>>>>", totalDays);
   }
 
   const priceContract = contractCheck.price;
@@ -355,9 +331,9 @@ paymentController.getPhoneContract = catchAsync(async (req, res, next) => {
     let interest1 =
       (totalDays - (totalDays % contractCheck.interests[2].dateEnd)) /
       contractCheck.interests[2].dateEnd;
-    console.log("interest1", interest1);
+
     let interest2 = totalDays % contractCheck.interests[2].dateEnd;
-    console.log("interest2", interest2);
+
     let interestRateContract2;
     if (interest2 === 0) {
       interestRateContract2 = 0;
@@ -374,7 +350,7 @@ paymentController.getPhoneContract = catchAsync(async (req, res, next) => {
         contractCheck.interests[2].interest * interest1 + interestRateContract2;
     }
   }
-  console.log("interestRateContract", interestRateContract);
+
   //   const lastPaidContractDate = new Date(); //Chua hieu logic
 
   const paymentforInterest = interestRateContract * priceContract;
