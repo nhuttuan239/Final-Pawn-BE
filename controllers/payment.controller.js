@@ -99,7 +99,7 @@ paymentController.putInfoPayment = catchAsync(async (req, res, next) => {
 
   const payment = {
     authorCheckPayment: currentUserId,
-    customer: contractCheck.customerName,
+    customer: customerName,
     createDate: formatCreateDate,
     payDate: formatPayDate,
     cnumber: cnumberCheck,
