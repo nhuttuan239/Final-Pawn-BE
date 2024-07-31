@@ -130,11 +130,11 @@ customerController.deleteCustomer = catchAsync(async (req, res, next) => {
 customerController.getCustomers = catchAsync(async (req, res, next) => {
   //Get data from request
 
-  let { ...filter } = { ...req.query };
+  let { page, limit, ...filter } = { ...req.query };
 
   // Business Logic Validation
-  // page = parseInt(page) || 1;
-  // limit = parseInt(limit) || 20;
+  page = parseInt(page) || 1;
+  limit = parseInt(limit) || 20;
   // Process
   const filterConditions = [{ isDeleted: false }, {}];
   if (filter.name) {
@@ -145,18 +145,20 @@ customerController.getCustomers = catchAsync(async (req, res, next) => {
     ? { $and: filterConditions }
     : {};
   const count = await Customer.countDocuments(filterCriteria);
-  // const totalPages = Math.ceil(count / limit);
-  // const offset = limit * (page - 1);
+  const totalPages = Math.ceil(count / limit);
+  const offset = limit * (page - 1);
 
   let customers = await Customer.find(filterCriteria)
     .sort({ createdAt: -1 })
-    .skip(offset);
+    .skip(offset)
+    .limit(limit);
+
   //Response
   sendResponse(
     res,
     200,
     true,
-    { customers, count },
+    { customers, totalPages, count },
     null,
     "Get customers successful"
   );
