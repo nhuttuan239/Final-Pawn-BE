@@ -212,10 +212,10 @@ contractController.getManagerContracts = catchAsync(async (req, res, next) => {
   if (!user)
     throw new AppError(401, "User not found", "Get Current User Error");
 
-  let { ...filter } = { ...req.query };
+  let { page, limit, ...filter } = { ...req.query };
   // Business Logic Validation
-  // page = parseInt(page) || 1;
-  // limit = parseInt(limit) || 10;
+  page = parseInt(page) || 1;
+  limit = parseInt(limit) || 10;
   // Process
   const filterConditions = [
     { isDeleted: false },
@@ -229,18 +229,20 @@ contractController.getManagerContracts = catchAsync(async (req, res, next) => {
     ? { $and: filterConditions }
     : {};
   const count = await Contract.countDocuments(filterCriteria);
-  // const totalPages = Math.ceil(count / limit);
-  // const offset = limit * (page - 1);
+  const totalPages = Math.ceil(count / limit);
+  const offset = limit * (page - 1);
 
   let contracts = await Contract.find(filterCriteria)
     .sort({ createdAt: -1 })
-    .skip(offset);
+    .skip(offset)
+    .limit(limit);
+
   //Response
   sendResponse(
     res,
     200,
     true,
-    { contracts, count },
+    { contracts, totalPages, count },
     null,
     "Get contracts successful"
   );
