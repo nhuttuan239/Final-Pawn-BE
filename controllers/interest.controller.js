@@ -124,10 +124,10 @@ interestController.getInterest = catchAsync(async (req, res, next) => {
   const user = await User.findById(currentUserId);
   if (!user) throw new AppError(401, "User not found", "Get Interests Error");
 
-  let { page, limit, ...filter } = { ...req.query };
+  let { ...filter } = { ...req.query };
   // Business Logic Validation
-  page = parseInt(page) || 1;
-  limit = parseInt(limit) || 10;
+  // page = parseInt(page) || 1;
+  // limit = parseInt(limit) || 10;
   // Process
   const filterConditions = [{ isDeleted: false }];
   if (filter.name) {
@@ -138,20 +138,18 @@ interestController.getInterest = catchAsync(async (req, res, next) => {
     ? { $and: filterConditions }
     : {};
   const count = await Interest.countDocuments(filterCriteria);
-  const totalPages = Math.ceil(count / limit);
-  const offset = limit * (page - 1);
+  // const totalPages = Math.ceil(count / limit);
+  // const offset = limit * (page - 1);
 
   let interests = await Interest.find(filterCriteria)
     .sort({ createdAt: -1 })
-    .skip(offset)
-    .limit(limit);
-
+    .skip(offset);
   //Response
   sendResponse(
     res,
     200,
     true,
-    { interests, totalPages, count },
+    { interests, count },
     null,
     "Get interests successful"
   );
