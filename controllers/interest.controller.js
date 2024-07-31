@@ -19,23 +19,23 @@ interestController.createNewInterest = async (req, res, next) => {
   // Business Logic Validation
   //check already exist
   try {
-    let interestRate = await Interest.findOne({
+    let interestRateB = await Interest.findOne({
       interestCode,
       isDeleted: false,
     });
-    if (interestRate) {
+    if (interestRateB) {
       return sendResponse(
         res,
         200,
         true,
-        interestRate,
+
         null,
         "Interest already exists"
       );
     }
     //Process
 
-    interestRate = await Interest.create({
+    const interestRate = await Interest.create({
       interestType,
       interestCode,
       description,

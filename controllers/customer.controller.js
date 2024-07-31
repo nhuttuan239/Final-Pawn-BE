@@ -11,20 +11,13 @@ customerController.createNewCustomer = async (req, res, next) => {
 
   // Business Logic Validation
   try {
-    let customer = await Customer.findOne({ phone, isDeleted: false });
+    let customerB = await Customer.findOne({ phone }, { isDeleted: false });
 
-    if (customer) {
-      return sendResponse(
-        res,
-        200,
-        true,
-        customer,
-        null,
-        "Customer already exists"
-      );
+    if (customerB) {
+      return sendResponse(res, 200, true, null, "Customer already exists");
     }
 
-    customer = await Customer.create({
+    const customer = await Customer.create({
       fullname,
       phone,
       nationalId,
@@ -134,7 +127,7 @@ customerController.getCustomers = catchAsync(async (req, res, next) => {
 
   // Business Logic Validation
   page = parseInt(page) || 1;
-  limit = parseInt(limit) || 10;
+  limit = parseInt(limit) || 20;
   // Process
   const filterConditions = [{ isDeleted: false }, {}];
   if (filter.name) {
