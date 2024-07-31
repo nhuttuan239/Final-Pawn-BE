@@ -18,30 +18,45 @@ interestController.createNewInterest = async (req, res, next) => {
 
   // Business Logic Validation
   //check already exist
-  let interestRate = await Interest.findOne({ interestCode, isDeleted: false });
-  if (interestRate) {
-    sendResponse(res, 200, true, interestRate, null, "Interest already exists");
+  try {
+    let interestRate = await Interest.findOne({
+      interestCode,
+      isDeleted: false,
+    });
+    if (interestRate) {
+      return sendResponse(
+        res,
+        200,
+        true,
+        interestRate,
+        null,
+        "Interest already exists"
+      );
+    }
+    //Process
+
+    interestRate = await Interest.create({
+      interestType,
+      interestCode,
+      description,
+      dateStart,
+      dateEnd,
+      interest,
+    });
+
+    //Response
+    return sendResponse(
+      res,
+      200,
+      true,
+      interestRate,
+      null,
+      "Create A New Interest succesfull"
+    );
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
   }
-  //Process
-
-  interestRate = await Interest.create({
-    interestType,
-    interestCode,
-    description,
-    dateStart,
-    dateEnd,
-    interest,
-  });
-
-  //Response
-  sendResponse(
-    res,
-    200,
-    true,
-    interestRate,
-    null,
-    "Create A New Interest succesfull"
-  );
 };
 
 //------------------------Update Interest --------------------------

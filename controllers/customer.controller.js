@@ -10,29 +10,68 @@ customerController.createNewCustomer = async (req, res, next) => {
   let { fullname, phone, nationalId, address } = req.body;
 
   // Business Logic Validation
-  //check already exist
-  let customer = await Customer.findOne({ phone });
-  if (customer)
-    throw new AppError(400, "Customer already exists", "Create Customer error");
-  //Process
+  try {
+    let customer = await Customer.findOne({ phone, isDeleted: false });
 
-  customer = await Customer.create({
-    fullname,
-    phone,
-    nationalId,
-    address,
-    createBy: currentUserId,
-  });
+    if (customer) {
+      return sendResponse(
+        res,
+        200,
+        true,
+        customer,
+        null,
+        "Customer already exists"
+      );
+    }
 
-  //Response
-  sendResponse(
-    res,
-    200,
-    true,
-    customer,
-    null,
-    "Create A New Customer succesfull"
-  );
+    customer = await Customer.create({
+      fullname,
+      phone,
+      nationalId,
+      address,
+      createBy: currentUserId,
+    });
+
+    return sendResponse(
+      res,
+      200,
+      true,
+      customer,
+      null,
+      "Create A New Customer succesfull"
+    );
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+
+  // //check already exist
+  // let customer = await Customer.findOne({ phone,is });
+  // if (customer) {
+  //   sendResponse(res, 200, true, customer, null, "Customer already exists");
+  // }
+  // // throw new AppError(400, "Customer already exists", "Create Customer error");
+
+  // //Process
+  // else {
+  //   customer = await Customer.create({
+  //     fullname,
+  //     phone,
+  //     nationalId,
+  //     address,
+  //     createBy: currentUserId,
+  //   });
+
+  //   //Response
+  //   sendResponse(
+  //     res,
+  //     200,
+  //     true,
+  //     customer,
+  //     null,
+  //     "Create A New Customer succesfull"
+  //   );
+  // }
 };
 
 //------------------------Update Single Customer --------------------------
